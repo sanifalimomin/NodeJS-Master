@@ -1,6 +1,6 @@
 # Master Node.js
 
-Implmentation of
+Implementation of
 - bcrypt (hashing)
 - multer (file uploading)
 - nodemailer (Mailer)
