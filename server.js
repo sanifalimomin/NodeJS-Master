@@ -12,7 +12,16 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 var multer  = require('multer')
-var upload = multer({ dest: 'uploads/' })
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    cb(null,req.body.email)
+  }
+})
+ 
+var upload = multer({ storage: storage })
 
 app.listen(port, ()=>{
 	console.log(`server is listening on port:${port}`)
@@ -40,6 +49,10 @@ function sendResponse(res,err,data){
   }
 }
 
+//UPLOAD PHOTO
+app.post('/photos', upload.any(), function (req, res) {
+  res.send(req.body.email);
+})
 
 // CREATE
 app.post('/users',(req,res)=>{
@@ -52,7 +65,7 @@ app.post('/users',(req,res)=>{
     (err,data)=>{sendResponse(res,err,data)})
 })
 
-
+// CHECK USER EMAIL AND PASSWORD
 app.post('/checkuser',(req,res)=>{
   User.findOne({email:req.body.email},(err,data)=>{
     if (err){
@@ -79,6 +92,7 @@ app.post('/checkuser',(req,res)=>{
     }
   })
 })
+
 
 
 app.route('/users/:id')
