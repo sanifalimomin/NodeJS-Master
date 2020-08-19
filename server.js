@@ -20,8 +20,19 @@ var storage = multer.diskStorage({
     cb(null,req.body.email)
   }
 })
- 
 var upload = multer({ storage: storage })
+
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'email',
+    pass: 'password'
+  }
+});
+
+
+
 
 app.listen(port, ()=>{
 	console.log(`server is listening on port:${port}`)
@@ -48,6 +59,24 @@ function sendResponse(res,err,data){
     })
   }
 }
+
+//NODE MAILER
+app.post('/mail',(req,res)=>{
+  var mailOptions = {
+    from: 'sanifali@gmail.com',
+    to: req.body.email,
+    subject: req.body.subject,
+    text: req.body.text
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      res.send(err)
+    } else {
+      res.send("Success");
+    }
+  });
+})
 
 //UPLOAD PHOTO
 app.post('/photos', upload.any(), function (req, res) {
