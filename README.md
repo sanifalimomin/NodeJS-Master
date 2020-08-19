@@ -1,3 +1,6 @@
 # Master Node.js
 
-Check out the issues of this repo for the course materials.
+Implmentation of
+-bcrypt (hashing)
+-multer (file uploading)
+-nodemailer (Mailer)
